@@ -2,7 +2,7 @@ class Github {
   constructor() {
     this.config = {
       headers: {
-        Authorization: 'token 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',
+        Authorization: `token ${githubToken}`, // comes from token.js
       },
     };
     this.repos_count = 5;
