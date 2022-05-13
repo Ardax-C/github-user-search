@@ -1,1 +1,1 @@
-const githubToken = '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';
+const githubToken = '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';
