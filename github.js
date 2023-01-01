@@ -1,37 +1,40 @@
-class Github {
+class GitHub {
   constructor() {
     this.config = {
       headers: {
-        Authorization: `token ${githubToken}`, // comes from token.js
+        Authorization: 'token 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',
       },
-    };
-    // Limit number of repos displayed
-    this.repos_count = 5;
-    // Sort repos by most recent
-    this.repos_sort = 'created: asc';
+    }
+    this.repos_count = 5
+    this.repos_sort = 'created: asc'
   }
-
-  // Get user profile
   async getUser(user) {
-    // Get user profile
-    const profileResponse = await fetch(
+    // cache the user so if we get a bad response we show the last 'good' user
+    let cachedUser = {}
+ 
+    const profileResponse = fetch(
       `https://api.github.com/users/${user}`,
       this.config
-    );
-
-    // Get repos associated with user profile
-    const repoResponse = await fetch(
+    )
+ 
+    const repoResponse = fetch(
       `https://api.github.com/users/${user}/repos?per_page=${this.repos_count}&sort=${this.repos_sort}`,
       this.config
-    );
-
-    const profile = await profileResponse.json();
-
-    const repos = await repoResponse.json();
-
-    return {
-      profile,
-      repos,
-    };
+    )
+ 
+    // concurrently fetch profile and repos
+    const responses = await Promise.all([profileResponse, repoResponse])
+ 
+    // check response was good
+    if (responses.every((res) => res.ok)) {
+      const [profile, repos] = await Promise.all(
+        responses.map((promise) => promise.json())
+      )
+      cachedUser = { profile, repos }
+    } else {
+      cachedUser.message = 'User Not Found'
+    }
+ 
+    return cachedUser
   }
 }
