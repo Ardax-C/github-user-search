@@ -1,8 +1,9 @@
+const token = new Token;
 class GitHub {
   constructor() {
     this.config = {
       headers: {
-        Authorization: 'token githubToken',
+        Authorization: `token ${token.getToken()}`,
       },
     }
     this.repos_count = 5
