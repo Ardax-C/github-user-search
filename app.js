@@ -1,5 +1,5 @@
 //Init Github
-const github = new Github();
+const github = new GitHub();
 //Init UI
 const ui = new UI();
 // Search Input
