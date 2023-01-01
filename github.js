@@ -1,9 +1,8 @@
-const token = new Token;
 class GitHub {
   constructor() {
     this.config = {
       headers: {
-        Authorization: `token ${token.getToken()}`,
+        curl -v -H USERNAME:TOKEN https://api.github.com/ardax-c
       },
     }
     this.repos_count = 5
