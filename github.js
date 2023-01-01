@@ -2,7 +2,7 @@ class GitHub {
   constructor() {
     this.config = {
       headers: {
-        curl -u ardax-c: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 https://api.github.com/ardax-c
+        curl -u ardax-c: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 https://api.github.com/user
       },
     }
     this.repos_count = 5
