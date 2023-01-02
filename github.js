@@ -2,39 +2,28 @@ class GitHub {
   constructor() {
     this.config = {
       headers: {
-        Authorization: `token ${githubToken}`,
+        Authorization: `token ${token}`,
       },
-    }
-    this.repos_count = 5
-    this.repos_sort = 'created: asc'
+    };
+    this.repos_count = 5;
+    this.repos_sort = 'created: asc';
   }
+
   async getUser(user) {
-    // cache the user so if we get a bad response we show the last 'good' user
-    let cachedUser = {}
- 
-    const profileResponse = fetch(
-      `https://api.github.com/users/${user}`,
-      this.config
-    )
- 
-    const repoResponse = fetch(
-      `https://api.github.com/users/${user}/repos?per_page=${this.repos_count}&sort=${this.repos_sort}`,
-      this.config
-    )
- 
-    // concurrently fetch profile and repos
-    const responses = await Promise.all([profileResponse, repoResponse])
- 
-    // check response was good
-    if (responses.every((res) => res.ok)) {
-      const [profile, repos] = await Promise.all(
-        responses.map((promise) => promise.json())
-      )
-      cachedUser = { profile, repos }
-    } else {
-      cachedUser.message = 'User Not Found'
-    }
- 
-    return cachedUser
+    const profileResponse = await fetch(
+      `https://api.github.com/users/${user}?client_id=${this.client_id}&client_secret${this.client_secret}`
+    );
+
+    const repoResponse = await fetch(
+      `https://api.github.com/users/${user}/repos?per_page=${this.repos_count}&sort=${this.repos_sort}&client_id=${this.client_id}&client_secret${this.client_secret}`
+    );
+
+    const profile = await profileResponse.json();
+    const repos = await repoResponse.json();
+
+    return {
+      profile,
+      repos,
+    };
   }
 }
